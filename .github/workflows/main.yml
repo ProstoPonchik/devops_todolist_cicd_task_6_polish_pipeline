@@ -25,6 +25,8 @@ concurrency:
 
 env:
   DockerImageName: todoapp
+  PrimaryOs: ubuntu-latest
+  PrimaryPythonVersion: "3.8"
 
 jobs:
   python-ci:
@@ -76,14 +78,14 @@ jobs:
           path: .
 
       - name: Upload helm artifacts
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'main' && matrix.os == env.PrimaryOs && matrix.python-version == env.PrimaryPythonVersion
         uses: actions/upload-artifact@v4
         with:
           name: helm-artifacts
           path: ${{ github.workspace }}/helm-charts
 
       - name: Upload kind cluster artifact
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'main' && matrix.os == env.PrimaryOs && matrix.python-version == env.PrimaryPythonVersion
         uses: actions/upload-artifact@v4
         with:
           name: kind-cluster
